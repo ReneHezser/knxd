@@ -1,25 +1,23 @@
-## KNXD Dockerfile
+# KNXD Dockerfile
 
 
-This repository contains **Dockerfile** of KNXD
+This repository contains **Dockerfile** of KNXD.
 
-### Base Docker Image
+## Docker Image
 
-* [ubuntu](https://hub.docker.com/_/ubuntu) 20.04
+* The image uses [ubuntu](https://hub.docker.com/_/ubuntu) 20.04 as base image
+* The tag matches the tag of the [knxd repository](https://github.com/knxd/knxd/tags). In addition to that tag, the "latest" tag and an increasing number is added to each image.
+* dependabot checks for an update base image
 
 
-### Installation
-
+## Installation
 1. Install [Docker](https://www.docker.com/).
+2. Download: `docker pull renehezser/knxd`
+3. Create a local container (see usage below)
 
-2. Download: `docker pull tekn0ir/knxd`
+## Usage
 
-   (alternatively, you can build an image from Dockerfile: `docker build -t="tekn0ir/knxd" github.com/tekn0ir/knxd`)
-
-
-### Usage
-
-    docker run -d -p 0.0.0.0:6720:6720 -v /path/to/config.ini:/another/path/to/config.ini tekn0ir/knxd /another/path/to/config.ini
+    docker run -d -p 0.0.0.0:6720:6720 -v /path/to/config.ini:/another/path/to/config.ini renehezser/knxd /another/path/to/config.ini
 
 ### config.ini
 
@@ -43,3 +41,11 @@ services:
     restart: always
     network_mode: host
 ```
+
+## Building the image
+The images are build automatically with GitHub actions. If you want to build the image yourself, you can build an image from the Dockerfile: `docker build -t="renehezser/knxd" github.com/renehezser/knxd`
+
+*the reference to [act](https://github.com/nektos/act) in the docker-image.yaml file is to run GitHub actions locally and not uploading the result to docker hub*
+
+## TODO
+- create a new image when knxd releases a new version

@@ -1,0 +1,61 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # get knxd tag
+    - uses: oprypin/find-latest-tag@v1
+      with:
+        repository: knxd/knxd
+        releases-only: false
+      # The step ID to refer to later.
+      id: knxd
+
+    # prepare for multi arch images
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Docker Hub
+      # don't login to docker hub, if running with act
+      if: github.event_name != 'pull_request' && !env.ACT
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        logout: true
+    
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        # list of Docker images to use as base name for tags
+        images: renehezser/knxd
+        flavor: latest=true
+        # generate Docker tags based on the GitHub run number (for unique identification) and the knxd version
+        tags: |
+          type=raw,value=${{github.run_number}}
+          type=raw,value=${{steps.knxd.outputs.tag}}
+
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: ${{ github.event_name != 'pull_request' && !env.ACT }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
