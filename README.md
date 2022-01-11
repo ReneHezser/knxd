@@ -47,5 +47,9 @@ The images are build automatically with GitHub actions. If you want to build the
 
 *the reference to [act](https://github.com/nektos/act) in the docker-image.yaml file is to run GitHub actions locally and not uploading the result to docker hub*
 
+## Changelog
+
+- 0.14.53: knxd update
+
 ## TODO
 - create a new image when knxd releases a new version
