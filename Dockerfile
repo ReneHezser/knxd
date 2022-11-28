@@ -47,7 +47,6 @@ RUN dpkg -i knxd_*.deb knxd-tools_*.deb
 # clean up
 RUN rm /root/*.deb && \
   rm /root/*.changes && \
-  rm /root/*.tar.gz && \
   rm -rf /root/knxd && \
   rm -rf /usr/share/locale/* && \
   rm -rf /var/cache/debconf/*-old && \
