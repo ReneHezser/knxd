@@ -30,21 +30,13 @@ RUN apt-get update \
  && apt-get autoclean -y \
  && apt-get autoremove
 
-RUN curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.12/gosu-amd64" && \
-	echo "0f25a21cf64e58078057adc78f38705163c1d564a959ff30a891c31917011a54 /usr/local/bin/gosu" | sha256sum -c && \
+RUN curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.14/gosu-amd64" && \
+	echo "bd8be776e97ec2b911190a82d9ab3fa6c013ae6d3121eea3d0bfd5c82a0eaf8c /usr/local/bin/gosu" | sha256sum -c && \
 	chmod +x /usr/local/bin/gosu
 
 # and get the source code
 WORKDIR /root
 RUN git clone https://github.com/knxd/knxd.git --single-branch --branch debian
-
-# knxd requires libpthsem which unfortunately isn't part of Debian
-COPY pthsem_2.0.8.tar.gz /root/pthsem_2.0.8.tar.gz
-RUN tar xzf pthsem_2.0.8.tar.gz
-WORKDIR /root/pthsem-2.0.8
-RUN dpkg-buildpackage -b -uc
-WORKDIR /root
-RUN dpkg -i libpthsem*.deb
 
 # now build+install knxd itself
 WORKDIR /root/knxd
@@ -57,7 +49,6 @@ RUN rm /root/*.deb && \
   rm /root/*.changes && \
   rm /root/*.tar.gz && \
   rm -rf /root/knxd && \
-  rm -rf /root/pthsem-2.0.8 && \
   rm -rf /usr/share/locale/* && \
   rm -rf /var/cache/debconf/*-old && \
   rm -rf /var/lib/apt/lists/* && \
