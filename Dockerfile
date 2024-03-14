@@ -30,6 +30,14 @@ RUN apt-get update \
  && apt-get autoclean -y \
  && apt-get autoremove
 
+RUN dpkg --print-architecture
+
+RUN if [ $(dpkg --print-architecture) = 'amd64' ]; then \
+      echo "You are amd64"; \
+    elif [ $(dpkg --print-architecture) = 'arm64' ]; then \
+      echo "You are arm64"; \
+    fi
+
 RUN curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.14/gosu-amd64" && \
 	echo "bd8be776e97ec2b911190a82d9ab3fa6c013ae6d3121eea3d0bfd5c82a0eaf8c /usr/local/bin/gosu" | sha256sum -c && \
 	chmod +x /usr/local/bin/gosu
