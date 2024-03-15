@@ -36,7 +36,8 @@ RUN if [ $(dpkg --print-architecture) = 'amd64' ]; then \
       curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.14/gosu-amd64" && \
       echo "bd8be776e97ec2b911190a82d9ab3fa6c013ae6d3121eea3d0bfd5c82a0eaf8c /usr/local/bin/gosu" | sha256sum -c; \
     elif [ $(dpkg --print-architecture) = 'arm64' ]; then \
-      echo "You are arm64"; \
+      curl -o /usr/local/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.14/gosu-arm64" && \
+      echo "73244a858f5514a927a0f2510d533b4b57169b64d2aa3f9d98d92a7a7df80cea /usr/local/bin/gosu" | sha256sum -c; \
     fi
 
 RUN chmod +x /usr/local/bin/gosu
