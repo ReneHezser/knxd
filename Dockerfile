@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:25.10
 ENV DEBIAN_FRONTEND=noninteractive
 
 MAINTAINER Anders Åslund <anders.aslund@teknoir.se>
